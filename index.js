@@ -16,7 +16,7 @@ var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _cellHeader = require('./cell-header');
+var _cellHeader = require('./dist/cell-header');
 
 var _cellHeader2 = _interopRequireDefault(_cellHeader);
 

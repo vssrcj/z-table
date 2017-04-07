@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 import axios from 'axios'
 
-import CellHeader from './cell-header'
+import CellHeader from './dist/cell-header'
 
 export default class ZTable extends Component {
 	static propTypes = {
