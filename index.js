@@ -263,7 +263,7 @@ var ZTable = function (_Component) {
 
 			if (data === undefined) return _react2.default.createElement(
 				'div',
-				null,
+				{ className: 'z-table--loading' },
 				'Loading....'
 			);
 

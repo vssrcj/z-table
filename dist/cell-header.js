@@ -138,10 +138,9 @@ var CellHeader = function (_Component) {
 					sortName
 				) : sortName,
 				column.value && _react2.default.createElement(
-					'i',
-					{ className: 'material-icons', onClick: onSortChange,
-						style: { marginLeft: column.alignRight ? '10px' : 'auto', cursor: 'pointer', color: sort ? '#333' : '#ccc' } },
-					sort && !sort.asc ? 'keyboard_arrow_up' : 'keyboard_arrow_down'
+					'div',
+					{ onClick: onSortChange, style: { marginLeft: column.alignRight ? '10px' : 'auto' }, className: 'z-table--sort' + (sort ? ' z-table--sort-active' : '') },
+					sort && !sort.asc ? '▴' : '▾'
 				)
 			);
 		}
