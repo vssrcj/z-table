@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react'
 import axios from 'axios'
 
 import CellHeader from './dist/cell-header'
+import { exportTable } from './dist/utils'
 
 export default class ZTable extends Component {
 	static propTypes = {
@@ -28,9 +29,10 @@ export default class ZTable extends Component {
 		super(props)
 		this.state = {
 			data: undefined,
-			activeColumn: undefined,
+			activeColumn: null,
 			activeSort: props.defaultSort,
 			columns: props.columns.map(column => ({ ...column, filter: '' })),
+			pageLength: props.pageLength,
 			page: 1
 		}
 	}
@@ -50,7 +52,7 @@ export default class ZTable extends Component {
 	}))
 
 	onColumnSearch = (value, filter) => this.changeWrapper(() => {
-		this.setActiveColumn(undefined)
+		this.setActiveColumn(null)
 
 		const columns = this.state.columns.map(column => (
 			column.value === value
@@ -62,6 +64,10 @@ export default class ZTable extends Component {
 			columns
 		}
 	})
+
+	onPagerChange = (event) => this.changeWrapper(() => ({
+		pageLength: event.target.value
+	}))
 
 	componentWillMount () {
 		this.load()
@@ -76,10 +82,11 @@ export default class ZTable extends Component {
 		data[key] === undefined ? this.state[key] : data[key]
 	)
 
-	load (data = {}, callBack) {
+	load (data = {}, callback) {
 		const page = data.page === undefined ? 1 : data.page
 		const columns = this.extract('columns', data)
 		const sort = this.extract('activeSort', data)
+		const pageLength = this.extract('pageLength', data)
 
 		const params = {}
 
@@ -97,16 +104,17 @@ export default class ZTable extends Component {
 			this.props.url,
 			{
 				'page': page || 1,
-				'pageLength': this.props.pageLength,
+				'pageLength': pageLength,
 				...params
 			}
 		).then(result => {
+			const data = this.parseAll(result.data)
 			this.setState({
-				data: this.parseAll(result.data),
+				data,
 				page,
 				loading: false
 			})
-			if (callBack) callBack()
+			if (callback) callback(data.items)
 		})
 	}
 
@@ -120,20 +128,28 @@ export default class ZTable extends Component {
 		this.setState({ activeColumn })
 	}
 
+	onExport = () => this.load({}, items => (
+		exportTable(
+			items,
+			this.state.columns.filter(column => column.value),
+			this.props.name
+		)
+	))
+
 	renderFromPage = () => {
-		const { state: { page }, props: { pageLength } } = this
+		const { page, pageLength } = this.state
 		return (page - 1) * pageLength + 1
 	}
 
 	renderToPage = () => {
-		const { state: { page }, props: { pageLength } } = this
+		const { page, pageLength } = this.state
 		return page * pageLength
 	}
 
 	changePage = (page) => () => this.changeWrapper(() => ({ page }))
 
 	renderPaging = () => {
-		const { state: { page, data: { items, hasMore } }, props: { pageLength } } = this
+		const { page, pageLength, data: { items, hasMore } } = this.state
 		const length = items.length
 
 		return (
@@ -154,51 +170,55 @@ export default class ZTable extends Component {
 
 	render () {
 		const {
-			state: { data, columns, activeColumn, loading, activeSort },
-			props: { header }
+			state: { data, columns, activeColumn, loading, activeSort, pageLength },
+			props: { header, name }
 		} = this
 
 		if (data === undefined) return <div>Loading....</div>
 
 		return (
 			<div className='z-table'>
-				<div>
+				<div className='z-table--header'>
 					{ header }
+				</div>
+				<div className='z-table--sub-header'>
+					<input type='number' min='1' max='50' value={pageLength} onChange={this.onPagerChange} />
+					{ name ? <button className='z-table--button' onClick={this.onExport}>Export</button> : null }
 				</div>
 				<div>
 					<div className='z-table--head-wrapper'>
 						<div className='z-table--head'>
 							{
-								columns.map(column =>
+								columns.map((column, c) =>
 									<CellHeader
 										active={column.value === activeColumn}
 										sort={column.value === activeSort.value ? activeSort : undefined}
 										style={{ flex: column.flex }}
 										setActive={() => this.setActiveColumn(column.value)}
-										clearActive={() => this.setActiveColumn(undefined)}
+										clearActive={() => this.setActiveColumn(null)}
 										onSearch={filter => this.onColumnSearch(column.value, filter)}
 										onSortChange={() => this.onSortChange(column.value)}
 										column={column}
-										key={column.value}
+										key={c}
 									/>
 								)
 							}
 						</div>
 					</div>
-					<div className='z-table--body' style={{ overflowY: 'scroll', height: 'calc(100vh - 144px)', overflowX: 'hidden' }}>
+					<div className='z-table--body'>
 						{
 							loading
-							? <div className='z-table--loading'>Loading...</div>
+							? <div className='z-table--loader' />
 							: (
 								data.items.map((item, i) => (
 									<div className='z-table--row' key={i}>
 										{
-											columns.map(column => (
-												<div key={column.value} style={{ flex: column.flex, marginLeft: item.alignRight ? 'auto' : '0' }}>
+											columns.map((column, c) => (
+												<div key={c} style={{ flex: column.flex, marginLeft: item.alignRight ? 'auto' : '0' }}>
 													{
-														column.alignRight ? (
-															<div style={{ margin: '0 20px 0 auto' }}>{this.renderCell(column, item)}</div>
-														) : this.renderCell(column, item)
+														column.alignRight
+														? <div style={{ marginLeft: 'auto' }}>{this.renderCell(column, item)}</div>
+														: this.renderCell(column, item)
 													}
 												</div>
 											))
@@ -216,15 +236,4 @@ export default class ZTable extends Component {
 			</div>
 		)
 	}
-}
-
-const numberStyle = {
-	width: '24px',
-	height: '24px',
-	display: 'inline-flex',
-	alignItems: 'center',
-	background: '#888',
-	color: '#fff',
-	justifyContent: 'center',
-	cursor: 'pointer'
 }

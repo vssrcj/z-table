@@ -33,7 +33,6 @@ class CellHeader extends Component {
 	}
 
 	onSearch = () => {
-		console.log('search')
 		if (this.areEqual()) {
 			this.props.clearActive()
 		} else {
@@ -73,17 +72,24 @@ class CellHeader extends Component {
 
 		const { filter: columnFilter, name: columnName } = column
 
+		const sortName = (
+			<div
+				onClick={column.value ? setActive : undefined}
+				className={ `z-table--sort-name${column.filter ? ' z-table--active-sort-name' : ''}${column.value ? ' z-table--clickable-sort' : ''}` }
+			>
+				{column.filter || column.name}
+			</div>
+		)
+
 		return (
 			active
 			? (
 				<div className='z-table--cell-header' style={style}>
-					<div style={{ display: 'flex', width: '100%', background: '#fff', padding: '4px' }}>
+					<div className='z-table--head-input-container'>
 						<input
-							className='z-table--head-input'
 							type='text'
 							placeholder={columnName}
 							onChange={this.onFilterChange}
-							style={{ flex: '1', border: 'none', outline: 'none' }}
 							value={stateFilter === undefined ? columnFilter : stateFilter}
 							ref={input => { this.input = input }}
 							onBlur={this.onBlur}
@@ -97,14 +103,17 @@ class CellHeader extends Component {
 				<div className='z-table--cell-header' style={style}>
 					{
 						column.alignRight
-						? <span style={{ marginLeft: 'auto' }}>{column.name}</span>
-						: <div onClick={setActive} style={{ cursor: 'pointer',
-							display: 'flex', flex: '1', alignItems: 'center', fontWeight: column.filter ? 'bold' : 'inherit', color: column.filter ? '#000' : 'inherit' }}>{column.filter || column.name}</div>
+						? <div style={{ marginLeft: 'auto' }}>{sortName}</div>
+						: sortName
 					}
-					<i className="material-icons" onClick={onSortChange}
-						style={{ marginLeft: column.alignRight ? '10px' : 'auto', cursor: 'pointer', color: sort ? '#333' : '#ccc' }}>
-							{ sort && !sort.asc ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }
-					</i>
+					{
+						column.value && (
+							<i className="material-icons" onClick={onSortChange}
+							style={{ marginLeft: column.alignRight ? '10px' : 'auto', cursor: 'pointer', color: sort ? '#333' : '#ccc' }}>
+								{ sort && !sort.asc ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }
+							</i>
+						)
+					}
 				</div>
 			)
 		)

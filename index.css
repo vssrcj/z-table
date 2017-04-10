@@ -1,18 +1,22 @@
 .z-table {
 	width: 100%;
 	font-size: 14px;
-	color: #6d6e73;
+	color: #333;
 	font-weight: 500;
 	background: #fff;
 }
 
+.z-table--button {
+	border: none;
+	background: #5386a7;
+	color: #fff;
+	cursor: pointer;
+	padding: 7px;
+}
+.z-table--button:hover {
+	background: #437697;
+}
 .z-table--header {
-	 display: flex;
-	 align-items: center;
-	 height: 56px;
-	 padding: 0 10px;
-	 display: flex;
-    align-items: center;
 }
 .z-table--action {
 	color: #ddd;
@@ -21,19 +25,21 @@
 .z-table--action + .z-table--action {
 	margin-left: 10px;
 }
-.z-table--head-wrapper {
-	background: #eee;
+.z-table--head-wrapper {	
 }
 .z-table--head {
 	display: flex;
-	width: calc(100% - 16px);
+	width: calc(100%-16px);
 	height: 50px;
 }
 .z-table--row > div {
-	padding: 11px 10px;
+	padding: 4px 10px 4px 16px;
 	min-width: 80px;
 	display: flex;
 	align-items: center;
+}
+.z-table--row:nth-child(odd) {
+    background: #f7f7f7;
 }
 .z-table--row {
 	border-bottom: 1px solid #eee;
@@ -41,24 +47,10 @@
 	align-items: center;
 }
 .z-table--footer {
-	background: #eee;
-	height: 50px;
+	height: 64px;
 	display: flex;
-	padding: 0 10px;
+	padding: 0 16px;
 	align-items: center;
-}
-.z-table--button {
-	margin: 6px;
-	background: color;
-	color: #fff;
-	border-radius: 4px;
-	height: 34px;
-	padding: 0 10px;
-	border: none;
-	cursor: pointer;
-	outline: none;
-	font-size: 14px;
-	font-weight: bold
 }
 .z-table--cell-header {
 	width: 100%;
@@ -69,8 +61,9 @@
 	border-bottom: 1px solid #ddd;
 	min-width: 0;
 	display: flex;
-	padding: 0 5px;
+	padding: 0 10px 0 16px;
 	align-items: center;
+	color: #999;
 }
 .z-table--body {
 	position: relative;
@@ -91,12 +84,83 @@
 	margin-left: auto;
 }
 .z-table--page-active {
-	background: #bbb;
+	background: #5386a7;
 }
 .z-table--page.z-table--page-active {
 	color: #fff;
+	cursor: inherit;
 }
 
 .z-table--loading {
   padding: 8px;
+}
+
+.z-table--head-input-container {
+	display: flex;
+	width: 100%;
+	background: #fff;
+	padding: 4px 0;
+}
+.z-table--head-input-container > input {
+	flex: 1;
+	border: none;
+	outline: none;
+	font-family: inherit;
+	font-size: 14px;
+	min-width: 0;
+}
+
+.z-table--sort-name {
+	display: flex;
+	flex: 1;
+	align-items: center;
+}
+.z-table--clickable-sort {
+	cursor: pointer;
+}
+.z-table--active-sort-name {
+	font-weight: bold;
+	color: #000;
+}
+.z-table--sub-header > input {
+	outline: none;
+	border-radius: 2px;
+	width: 40px;
+	padding: 6px;
+	border: 1px solid #ccc;
+	margin-right: 10px;
+}
+.z-table--sub-header {
+	padding: 5px 0 2px 16px;
+}
+
+.z-table--loader {
+  height: 4px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #ddd;
+}
+
+.z-table--loader:hidden {
+	height: 0;
+}
+.z-table--loader:before {
+    display: block;
+    position: absolute;
+    content: "";
+    left: -200px;
+    width: 200px;
+    height: 4px;
+    background-color: #2980b9;
+    animation: loading 2s linear infinite;
+}
+
+@keyframes loading {
+    from {left: -200px; width: 30%;}
+    50% {width: 30%;}
+    70% {width: 70%;}
+    80% { left: 50%;}
+    95% {left: 120%;}
+    to {left: 100%;}
 }
