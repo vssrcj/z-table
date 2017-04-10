@@ -12,6 +12,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -19,6 +23,8 @@ var _axios2 = _interopRequireDefault(_axios);
 var _cellHeader = require('./dist/cell-header');
 
 var _cellHeader2 = _interopRequireDefault(_cellHeader);
+
+var _utils = require('./dist/utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -56,7 +62,7 @@ var ZTable = function (_Component) {
 
 		_this.onColumnSearch = function (value, filter) {
 			return _this.changeWrapper(function () {
-				_this.setActiveColumn(undefined);
+				_this.setActiveColumn(null);
 
 				var columns = _this.state.columns.map(function (column) {
 					return column.value === value ? _extends({}, column, { filter: filter }) : column;
@@ -64,6 +70,14 @@ var ZTable = function (_Component) {
 
 				return {
 					columns: columns
+				};
+			});
+		};
+
+		_this.onPagerChange = function (event) {
+			return _this.changeWrapper(function () {
+				return {
+					pageLength: event.target.value
 				};
 			});
 		};
@@ -87,16 +101,26 @@ var ZTable = function (_Component) {
 			_this.setState({ activeColumn: activeColumn });
 		};
 
+		_this.onExport = function () {
+			return _this.load({}, function (items) {
+				return (0, _utils.exportTable)(items, _this.state.columns.filter(function (column) {
+					return column.value;
+				}), _this.props.name);
+			});
+		};
+
 		_this.renderFromPage = function () {
-			var page = _this.state.page,
-			    pageLength = _this.props.pageLength;
+			var _this$state = _this.state,
+			    page = _this$state.page,
+			    pageLength = _this$state.pageLength;
 
 			return (page - 1) * pageLength + 1;
 		};
 
 		_this.renderToPage = function () {
-			var page = _this.state.page,
-			    pageLength = _this.props.pageLength;
+			var _this$state2 = _this.state,
+			    page = _this$state2.page,
+			    pageLength = _this$state2.pageLength;
 
 			return page * pageLength;
 		};
@@ -110,12 +134,12 @@ var ZTable = function (_Component) {
 		};
 
 		_this.renderPaging = function () {
-			var _this$state = _this.state,
-			    page = _this$state.page,
-			    _this$state$data = _this$state.data,
-			    items = _this$state$data.items,
-			    hasMore = _this$state$data.hasMore,
-			    pageLength = _this.props.pageLength;
+			var _this$state3 = _this.state,
+			    page = _this$state3.page,
+			    pageLength = _this$state3.pageLength,
+			    _this$state3$data = _this$state3.data,
+			    items = _this$state3$data.items,
+			    hasMore = _this$state3$data.hasMore;
 
 			var length = items.length;
 
@@ -157,11 +181,12 @@ var ZTable = function (_Component) {
 
 		_this.state = {
 			data: undefined,
-			activeColumn: undefined,
+			activeColumn: null,
 			activeSort: props.defaultSort,
 			columns: props.columns.map(function (column) {
 				return _extends({}, column, { filter: '' });
 			}),
+			pageLength: props.pageLength,
 			page: 1
 		};
 		return _this;
@@ -178,11 +203,12 @@ var ZTable = function (_Component) {
 			var _this2 = this;
 
 			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-			var callBack = arguments[1];
+			var callback = arguments[1];
 
 			var page = data.page === undefined ? 1 : data.page;
 			var columns = this.extract('columns', data);
 			var sort = this.extract('activeSort', data);
+			var pageLength = this.extract('pageLength', data);
 
 			var params = {};
 
@@ -198,14 +224,15 @@ var ZTable = function (_Component) {
 
 			_axios2.default.post(this.props.url, _extends({
 				'page': page || 1,
-				'pageLength': this.props.pageLength
+				'pageLength': pageLength
 			}, params)).then(function (result) {
+				var data = _this2.parseAll(result.data);
 				_this2.setState({
-					data: _this2.parseAll(result.data),
+					data: data,
 					page: page,
 					loading: false
 				});
-				if (callBack) callBack();
+				if (callback) callback(data.items);
 			});
 		}
 	}, {
@@ -219,7 +246,10 @@ var ZTable = function (_Component) {
 			    activeColumn = _state.activeColumn,
 			    loading = _state.loading,
 			    activeSort = _state.activeSort,
-			    header = this.props.header;
+			    pageLength = _state.pageLength,
+			    _props = this.props,
+			    header = _props.header,
+			    name = _props.name;
 
 
 			if (data === undefined) return _react2.default.createElement(
@@ -233,8 +263,18 @@ var ZTable = function (_Component) {
 				{ className: 'z-table' },
 				_react2.default.createElement(
 					'div',
-					null,
+					{ className: 'z-table--header' },
 					header
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'z-table--sub-header' },
+					_react2.default.createElement('input', { type: 'number', min: '1', max: '50', value: pageLength, onChange: this.onPagerChange }),
+					name ? _react2.default.createElement(
+						'button',
+						{ className: 'z-table--button', onClick: this.onExport },
+						'Export'
+					) : null
 				),
 				_react2.default.createElement(
 					'div',
@@ -245,7 +285,7 @@ var ZTable = function (_Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'z-table--head' },
-							columns.map(function (column) {
+							columns.map(function (column, c) {
 								return _react2.default.createElement(_cellHeader2.default, {
 									active: column.value === activeColumn,
 									sort: column.value === activeSort.value ? activeSort : undefined,
@@ -254,7 +294,7 @@ var ZTable = function (_Component) {
 										return _this3.setActiveColumn(column.value);
 									},
 									clearActive: function clearActive() {
-										return _this3.setActiveColumn(undefined);
+										return _this3.setActiveColumn(null);
 									},
 									onSearch: function onSearch(filter) {
 										return _this3.onColumnSearch(column.value, filter);
@@ -263,29 +303,25 @@ var ZTable = function (_Component) {
 										return _this3.onSortChange(column.value);
 									},
 									column: column,
-									key: column.value
+									key: c
 								});
 							})
 						)
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'z-table--body', style: { overflowY: 'scroll', height: 'calc(100vh - 144px)', overflowX: 'hidden' } },
-						loading ? _react2.default.createElement(
-							'div',
-							{ className: 'z-table--loading' },
-							'Loading...'
-						) : data.items.map(function (item, i) {
+						{ className: 'z-table--body' },
+						loading ? _react2.default.createElement('div', { className: 'z-table--loader' }) : data.items.map(function (item, i) {
 							return _react2.default.createElement(
 								'div',
 								{ className: 'z-table--row', key: i },
-								columns.map(function (column) {
+								columns.map(function (column, c) {
 									return _react2.default.createElement(
 										'div',
-										{ key: column.value, style: { flex: column.flex, marginLeft: item.alignRight ? 'auto' : '0' } },
+										{ key: c, style: { flex: column.flex, marginLeft: item.alignRight ? 'auto' : '0' } },
 										column.alignRight ? _react2.default.createElement(
 											'div',
-											{ style: { margin: '0 20px 0 auto' } },
+											{ style: { marginLeft: 'auto' } },
 											_this3.renderCell(column, item)
 										) : _this3.renderCell(column, item)
 									);
@@ -308,12 +344,13 @@ var ZTable = function (_Component) {
 }(_react.Component);
 
 ZTable.propTypes = {
-	parse: _react.PropTypes.func,
-	header: _react.PropTypes.node,
-	columns: _react.PropTypes.array.isRequired,
-	url: _react.PropTypes.string.isRequired,
-	pageLength: _react.PropTypes.number,
-	defaultSort: _react.PropTypes.object
+	parse: _propTypes2.default.func,
+	header: _propTypes2.default.node,
+	columns: _propTypes2.default.array.isRequired,
+	url: _propTypes2.default.string.isRequired,
+	pageLength: _propTypes2.default.number,
+	defaultSort: _propTypes2.default.object,
+	name: _propTypes2.default.string
 };
 ZTable.defaultProps = {
 	parse: function parse(item) {
@@ -327,15 +364,3 @@ ZTable.defaultProps = {
 	}
 };
 exports.default = ZTable;
-
-
-var numberStyle = {
-	width: '24px',
-	height: '24px',
-	display: 'inline-flex',
-	alignItems: 'center',
-	background: '#888',
-	color: '#fff',
-	justifyContent: 'center',
-	cursor: 'pointer'
-};

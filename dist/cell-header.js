@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44,7 +48,6 @@ var CellHeader = function (_Component) {
 
 			return stateFilter === columnFilter || stateFilter === undefined && !columnFilter;
 		}, _this.onSearch = function () {
-			console.log('search');
 			if (_this.areEqual()) {
 				_this.props.clearActive();
 			} else {
@@ -89,18 +92,25 @@ var CellHeader = function (_Component) {
 			    columnName = column.name;
 
 
+			var sortName = _react2.default.createElement(
+				'div',
+				{
+					onClick: column.value ? setActive : undefined,
+					className: 'z-table--sort-name' + (column.filter ? ' z-table--active-sort-name' : '') + (column.value ? ' z-table--clickable-sort' : '')
+				},
+				column.filter || column.name
+			);
+
 			return active ? _react2.default.createElement(
 				'div',
 				{ className: 'z-table--cell-header', style: style },
 				_react2.default.createElement(
 					'div',
-					{ style: { display: 'flex', width: '100%', background: '#fff', padding: '4px' } },
+					{ className: 'z-table--head-input-container' },
 					_react2.default.createElement('input', {
-						className: 'z-table--head-input',
 						type: 'text',
 						placeholder: columnName,
 						onChange: this.onFilterChange,
-						style: { flex: '1', border: 'none', outline: 'none' },
 						value: stateFilter === undefined ? columnFilter : stateFilter,
 						ref: function ref(input) {
 							_this3.input = input;
@@ -123,16 +133,11 @@ var CellHeader = function (_Component) {
 				'div',
 				{ className: 'z-table--cell-header', style: style },
 				column.alignRight ? _react2.default.createElement(
-					'span',
-					{ style: { marginLeft: 'auto' } },
-					column.name
-				) : _react2.default.createElement(
 					'div',
-					{ onClick: setActive, style: { cursor: 'pointer',
-							display: 'flex', flex: '1', alignItems: 'center', fontWeight: column.filter ? 'bold' : 'inherit', color: column.filter ? '#000' : 'inherit' } },
-					column.filter || column.name
-				),
-				_react2.default.createElement(
+					{ style: { marginLeft: 'auto' } },
+					sortName
+				) : sortName,
+				column.value && _react2.default.createElement(
 					'i',
 					{ className: 'material-icons', onClick: onSortChange,
 						style: { marginLeft: column.alignRight ? '10px' : 'auto', cursor: 'pointer', color: sort ? '#333' : '#ccc' } },
@@ -146,13 +151,13 @@ var CellHeader = function (_Component) {
 }(_react.Component);
 
 CellHeader.propTypes = {
-	setActive: _react.PropTypes.func.isRequired,
-	clearActive: _react.PropTypes.func.isRequired,
-	onSearch: _react.PropTypes.func.isRequired,
-	style: _react.PropTypes.object.isRequired,
-	active: _react.PropTypes.bool.isRequired,
-	column: _react.PropTypes.object.isRequired,
-	sort: _react.PropTypes.object,
-	onSortChange: _react.PropTypes.func.isRequired
+	setActive: _propTypes2.default.func.isRequired,
+	clearActive: _propTypes2.default.func.isRequired,
+	onSearch: _propTypes2.default.func.isRequired,
+	style: _propTypes2.default.object.isRequired,
+	active: _propTypes2.default.bool.isRequired,
+	column: _propTypes2.default.object.isRequired,
+	sort: _propTypes2.default.object,
+	onSortChange: _propTypes2.default.func.isRequired
 };
 exports.default = CellHeader;
