@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import axios from 'axios'
 
@@ -12,7 +13,8 @@ export default class ZTable extends Component {
 		columns: PropTypes.array.isRequired,
 		url: PropTypes.string.isRequired,
 		pageLength: PropTypes.number,
-		defaultSort: PropTypes.object
+		defaultSort: PropTypes.object,
+		name: PropTypes.string
 	}
 
 	static defaultProps = {
