@@ -228,15 +228,18 @@ export default class ZTable extends Component {
 								data.items.map((item, i) => (
 									<div className='z-table--row' key={i}>
 										{
-											columns.map((column, c) => (
-												<div key={c} style={{ flex: column.flex, marginLeft: item.alignRight ? 'auto' : '0' }}>
-													{
-														column.alignRight
-														? <div style={{ marginLeft: 'auto' }}>{this.renderCell(column, item)}</div>
-														: this.renderCell(column, item)
-													}
-												</div>
-											))
+											columns.map((column, c) => {
+												const style = column.style || {}
+												return (
+													<div key={c} style={{ marginLeft: item.alignRight ? 'auto' : '0', ...style }}>
+														{
+															column.alignRight
+															? <div style={{ marginLeft: 'auto' }}>{this.renderCell(column, item)}</div>
+															: this.renderCell(column, item)
+														}
+													</div>
+												)
+											})
 										}
 									</div>
 								))

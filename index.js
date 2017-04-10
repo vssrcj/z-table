@@ -326,9 +326,10 @@ var ZTable = function (_Component) {
 								'div',
 								{ className: 'z-table--row', key: i },
 								columns.map(function (column, c) {
+									var style = column.style || {};
 									return _react2.default.createElement(
 										'div',
-										{ key: c, style: { flex: column.flex, marginLeft: item.alignRight ? 'auto' : '0' } },
+										{ key: c, style: _extends({ marginLeft: item.alignRight ? 'auto' : '0' }, style) },
 										column.alignRight ? _react2.default.createElement(
 											'div',
 											{ style: { marginLeft: 'auto' } },
