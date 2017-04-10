@@ -49,15 +49,6 @@ var ZTable = function (_Component) {
 			_this.setState(result);
 		};
 
-		_this.componentWillMount = function () {
-			if (_this.props.setReload) {
-				_this.props.setReload(function () {
-					_this.setState({ loading: true, page: 1 });
-					_this.getData({ page: 1 });
-				});
-			}
-		};
-
 		_this.onSortChange = function (value) {
 			return _this.changeWrapper(function () {
 				return {
@@ -204,12 +195,20 @@ var ZTable = function (_Component) {
 	_createClass(ZTable, [{
 		key: 'componentWillMount',
 		value: function componentWillMount() {
+			var _this2 = this;
+
 			this.load();
+			if (this.props.setReload) {
+				this.props.setReload(function () {
+					_this2.setState({ loading: true, page: 1 });
+					_this2.load({ page: 1 });
+				});
+			}
 		}
 	}, {
 		key: 'load',
 		value: function load() {
-			var _this2 = this;
+			var _this3 = this;
 
 			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 			var callback = arguments[1];
@@ -235,8 +234,8 @@ var ZTable = function (_Component) {
 				'page': page || 1,
 				'pageLength': pageLength
 			}, params)).then(function (result) {
-				var data = _this2.parseAll(result.data);
-				_this2.setState({
+				var data = _this3.parseAll(result.data);
+				_this3.setState({
 					data: data,
 					page: page,
 					loading: false
@@ -247,7 +246,7 @@ var ZTable = function (_Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this3 = this;
+			var _this4 = this;
 
 			var _state = this.state,
 			    data = _state.data,
@@ -302,16 +301,16 @@ var ZTable = function (_Component) {
 									sort: column.value === activeSort.value ? activeSort : undefined,
 									style: { flex: column.flex },
 									setActive: function setActive() {
-										return _this3.setActiveColumn(column.value);
+										return _this4.setActiveColumn(column.value);
 									},
 									clearActive: function clearActive() {
-										return _this3.setActiveColumn(null);
+										return _this4.setActiveColumn(null);
 									},
 									onSearch: function onSearch(filter) {
-										return _this3.onColumnSearch(column.value, filter);
+										return _this4.onColumnSearch(column.value, filter);
 									},
 									onSortChange: function onSortChange() {
-										return _this3.onSortChange(column.value);
+										return _this4.onSortChange(column.value);
 									},
 									column: column,
 									key: c
@@ -333,8 +332,8 @@ var ZTable = function (_Component) {
 										column.alignRight ? _react2.default.createElement(
 											'div',
 											{ style: { marginLeft: 'auto' } },
-											_this3.renderCell(column, item)
-										) : _this3.renderCell(column, item)
+											_this4.renderCell(column, item)
+										) : _this4.renderCell(column, item)
 									);
 								})
 							);

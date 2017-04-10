@@ -78,7 +78,7 @@ export default class ZTable extends Component {
 		if (this.props.setReload) {
 			this.props.setReload(() => {
 				this.setState({ loading: true, page: 1 })
-				this.getData({ page: 1 })
+				this.load({ page: 1 })
 			})
 		}
 	}
