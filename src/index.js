@@ -14,7 +14,8 @@ export default class ZTable extends Component {
 		url: PropTypes.string.isRequired,
 		pageLength: PropTypes.number,
 		defaultSort: PropTypes.object,
-		name: PropTypes.string
+		name: PropTypes.string,
+		subHeader: PropTypes.node
 	}
 
 	static defaultProps = {
@@ -173,17 +174,22 @@ export default class ZTable extends Component {
 	render () {
 		const {
 			state: { data, columns, activeColumn, loading, activeSort, pageLength },
-			props: { header, name }
+			props: { header, name, subHeader }
 		} = this
 
 		if (data === undefined) return <div>Loading....</div>
 
 		return (
 			<div className='z-table'>
-				<div className='z-table--header'>
-					{ header }
-				</div>
+				{
+					header
+					? <div className='z-table--header'>{ header }</div>
+					: null
+				}
 				<div className='z-table--sub-header'>
+					{
+						subHeader || null
+					}
 					<input type='number' min='1' max='50' value={pageLength} onChange={this.onPagerChange} />
 					{ name ? <button className='z-table--button' onClick={this.onExport}>Export</button> : null }
 				</div>

@@ -9,7 +9,7 @@ ReactDOM.render(
 	<div className='app'>
 		<ZTable
 			url='http://localhost/zing/web.portal/api/members/list/ZA'
-			header={<div style={{ fontSize: '20px', padding: '10px 16px' }}>Members</div>}
+			header='Members'
 			name='members'
 			columns={[
 				{ name: 'First Name', value: 'firstName', flex: '0.25' },

@@ -17,6 +17,8 @@
 	background: #437697;
 }
 .z-table--header {
+	font-size: 20px;
+	padding: 10px 16px;
 }
 .z-table--action {
 	color: #ddd;
@@ -29,7 +31,6 @@
 }
 .z-table--head {
 	display: flex;
-	width: calc(100%-16px);
 	height: 42px;
 }
 .z-table--row:first-child {
