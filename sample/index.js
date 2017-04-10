@@ -12,13 +12,13 @@ ReactDOM.render(
 			header='Members'
 			name='members'
 			columns={[
-				{ name: 'First Name', value: 'firstName', flex: '0.25' },
-				{ name: 'Last Name', value: 'lastName', flex: '0.25' },
-				{ name: 'Email', value: 'email', flex: '0.2' },
-				{ name: 'Msisdn', value: 'msisdn', flex: '0.2', alignRight: true },
+				{ name: 'First Name', value: 'firstName', style: { flex: '0.25' } },
+				{ name: 'Last Name', value: 'lastName', style: { flex: '0.25' } },
+				{ name: 'Email', value: 'email', style: { flex: '0.2' } },
+				{ name: 'Msisdn', value: 'msisdn', style: { flex: '0.2' }, alignRight: true },
 				{
 					name: 'Actions',
-					flex: '0.1',
+					style: { flex: '0.1' },
 					alignRight: true,
 					component: () => (
 						<div>

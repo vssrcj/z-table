@@ -296,10 +296,11 @@ var ZTable = function (_Component) {
 							'div',
 							{ className: 'z-table--head' },
 							columns.map(function (column, c) {
+								var style = column.style || {};
 								return _react2.default.createElement(_cellHeader2.default, {
 									active: column.value === activeColumn,
 									sort: column.value === activeSort.value ? activeSort : undefined,
-									style: { flex: column.flex },
+									style: style,
 									setActive: function setActive() {
 										return _this4.setActiveColumn(column.value);
 									},

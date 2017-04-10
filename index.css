@@ -28,6 +28,9 @@
 .z-table--action + .z-table--action {
 	margin-left: 10px;
 }
+.z-table--loading {
+	padding: 10px;
+}
 .z-table--head-wrapper {
 }
 .z-table--head {
@@ -39,9 +42,9 @@
 }
 .z-table--row > div {
 	padding: 4px 10px 4px 16px;
-	min-width: 80px;
 	display: flex;
 	align-items: center;
+	box-sizing: border-box;
 }
 .z-table--row:nth-child(odd) {
     background: #f7f7f7;
@@ -63,12 +66,12 @@
 	outline: none;
 	border: none;
 	background: inherit;
-	border-bottom: 1px solid #ddd;
 	min-width: 0;
 	display: flex;
 	padding: 0 10px 0 16px;
 	align-items: center;
 	color: #999;
+	box-sizing: border-box;
 }
 .z-table--body {
 	position: relative;
@@ -114,7 +117,24 @@
 	font-size: 14px;
 	min-width: 0;
 }
-
+.z-table--sort {
+	font-size: 17px;
+	cursor: pointer;
+	float: right;
+	color: transparent;
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+	text-align: center;
+	border-radius: 16px;
+}
+.z-table--cell-header:hover .z-table--sort {
+	color: #333;
+	background: #f3f3f3;
+}
+.z-table--sort.z-table--sort-active {
+	color: #333;
+}
 .z-table--sort-name {
 	display: flex;
 	flex: 1;

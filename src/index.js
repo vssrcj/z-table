@@ -184,7 +184,7 @@ export default class ZTable extends Component {
 			props: { header, name, subHeader }
 		} = this
 
-		if (data === undefined) return <div>Loading....</div>
+		if (data === undefined) return <div className='z-table--loading'>Loading....</div>
 
 		return (
 			<div className='z-table'>
@@ -204,19 +204,22 @@ export default class ZTable extends Component {
 					<div className='z-table--head-wrapper'>
 						<div className='z-table--head'>
 							{
-								columns.map((column, c) =>
-									<CellHeader
-										active={column.value === activeColumn}
-										sort={column.value === activeSort.value ? activeSort : undefined}
-										style={{ flex: column.flex }}
-										setActive={() => this.setActiveColumn(column.value)}
-										clearActive={() => this.setActiveColumn(null)}
-										onSearch={filter => this.onColumnSearch(column.value, filter)}
-										onSortChange={() => this.onSortChange(column.value)}
-										column={column}
-										key={c}
-									/>
-								)
+								columns.map((column, c) => {
+									const style = column.style || {}
+									return (
+										<CellHeader
+											active={column.value === activeColumn}
+											sort={column.value === activeSort.value ? activeSort : undefined}
+											style={style}
+											setActive={() => this.setActiveColumn(column.value)}
+											clearActive={() => this.setActiveColumn(null)}
+											onSearch={filter => this.onColumnSearch(column.value, filter)}
+											onSortChange={() => this.onSortChange(column.value)}
+											column={column}
+											key={c}
+										/>
+									)
+								})
 							}
 						</div>
 					</div>
