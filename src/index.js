@@ -48,15 +48,6 @@ export default class ZTable extends Component {
 		this.setState(result)
 	}
 
-	componentWillMount = () => {
-		if (this.props.setReload) {
-			this.props.setReload(() => {
-				this.setState({ loading: true, page: 1 })
-				this.getData({ page: 1 })
-			})
-		}
-	}
-
 	onSortChange = (value) => this.changeWrapper(() => ({
 		activeSort: {
 			value,
@@ -84,6 +75,12 @@ export default class ZTable extends Component {
 
 	componentWillMount () {
 		this.load()
+		if (this.props.setReload) {
+			this.props.setReload(() => {
+				this.setState({ loading: true, page: 1 })
+				this.getData({ page: 1 })
+			})
+		}
 	}
 
 	parseAll = result => ({
