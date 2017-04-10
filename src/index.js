@@ -190,7 +190,7 @@ export default class ZTable extends Component {
 					{
 						subHeader || null
 					}
-					<input type='number' min='1' max='50' value={pageLength} onChange={this.onPagerChange} />
+					<input className='z-table--pager' type='number' min='1' max='50' value={pageLength} onChange={this.onPagerChange} />
 					{ name ? <button className='z-table--button' onClick={this.onExport}>Export</button> : null }
 				</div>
 				<div>

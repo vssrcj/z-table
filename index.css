@@ -126,7 +126,7 @@
 	font-weight: bold;
 	color: #000;
 }
-.z-table--sub-header > input {
+.z-table--pager {
 	outline: none;
 	border-radius: 2px;
 	width: 40px;

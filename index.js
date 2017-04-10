@@ -249,7 +249,8 @@ var ZTable = function (_Component) {
 			    pageLength = _state.pageLength,
 			    _props = this.props,
 			    header = _props.header,
-			    name = _props.name;
+			    name = _props.name,
+			    subHeader = _props.subHeader;
 
 
 			if (data === undefined) return _react2.default.createElement(
@@ -261,14 +262,15 @@ var ZTable = function (_Component) {
 			return _react2.default.createElement(
 				'div',
 				{ className: 'z-table' },
-				_react2.default.createElement(
+				header ? _react2.default.createElement(
 					'div',
 					{ className: 'z-table--header' },
 					header
-				),
+				) : null,
 				_react2.default.createElement(
 					'div',
 					{ className: 'z-table--sub-header' },
+					subHeader || null,
 					_react2.default.createElement('input', { type: 'number', min: '1', max: '50', value: pageLength, onChange: this.onPagerChange }),
 					name ? _react2.default.createElement(
 						'button',
@@ -350,7 +352,8 @@ ZTable.propTypes = {
 	url: _propTypes2.default.string.isRequired,
 	pageLength: _propTypes2.default.number,
 	defaultSort: _propTypes2.default.object,
-	name: _propTypes2.default.string
+	name: _propTypes2.default.string,
+	subHeader: _propTypes2.default.node
 };
 ZTable.defaultProps = {
 	parse: function parse(item) {
