@@ -15,7 +15,8 @@ export default class ZTable extends Component {
 		pageLength: PropTypes.number,
 		defaultSort: PropTypes.object,
 		name: PropTypes.string,
-		subHeader: PropTypes.node
+		subHeader: PropTypes.node,
+		setReload: PropTypes.func
 	}
 
 	static defaultProps = {
@@ -45,6 +46,15 @@ export default class ZTable extends Component {
 		const result = func()
 		this.load(result)
 		this.setState(result)
+	}
+
+	componentWillMount = () => {
+		if (this.props.setReload) {
+			this.props.setReload(() => {
+				this.setState({ loading: true, page: 1 })
+				this.getData({ page: 1 })
+			})
+		}
 	}
 
 	onSortChange = (value) => this.changeWrapper(() => ({

@@ -49,6 +49,15 @@ var ZTable = function (_Component) {
 			_this.setState(result);
 		};
 
+		_this.componentWillMount = function () {
+			if (_this.props.setReload) {
+				_this.props.setReload(function () {
+					_this.setState({ loading: true, page: 1 });
+					_this.getData({ page: 1 });
+				});
+			}
+		};
+
 		_this.onSortChange = function (value) {
 			return _this.changeWrapper(function () {
 				return {
@@ -271,7 +280,7 @@ var ZTable = function (_Component) {
 					'div',
 					{ className: 'z-table--sub-header' },
 					subHeader || null,
-					_react2.default.createElement('input', { type: 'number', min: '1', max: '50', value: pageLength, onChange: this.onPagerChange }),
+					_react2.default.createElement('input', { className: 'z-table--pager', type: 'number', min: '1', max: '50', value: pageLength, onChange: this.onPagerChange }),
 					name ? _react2.default.createElement(
 						'button',
 						{ className: 'z-table--button', onClick: this.onExport },
@@ -353,7 +362,8 @@ ZTable.propTypes = {
 	pageLength: _propTypes2.default.number,
 	defaultSort: _propTypes2.default.object,
 	name: _propTypes2.default.string,
-	subHeader: _propTypes2.default.node
+	subHeader: _propTypes2.default.node,
+	setReload: _propTypes2.default.func
 };
 ZTable.defaultProps = {
 	parse: function parse(item) {

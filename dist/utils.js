@@ -19,7 +19,6 @@ var getValue = exports.getValue = function getValue(obj, key) {
  * downloads table in a spreadsheet format
  */
 var exportTable = exports.exportTable = function exportTable(items, columns, name) {
-
 	// const renderColumns = columns.filter(x => x.key != undefined);
 	var header = columns.map(function (column) {
 		return '  <ss:Cell>\n' + '    <ss:Data ss:Type=\'String\'>' + column.name + '</ss:Data>\n' + '  </ss:Cell>\n';

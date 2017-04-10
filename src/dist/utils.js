@@ -14,7 +14,6 @@ export const getValue = (obj, key) => {
  * downloads table in a spreadsheet format
  */
 export const exportTable = (items, columns, name) => {
-
 	// const renderColumns = columns.filter(x => x.key != undefined);
 	const header = columns.map(column => (
 		'  <ss:Cell>\n' +
@@ -31,7 +30,7 @@ export const exportTable = (items, columns, name) => {
 				if (parse) val = parse(val)
 				return (
 					'  <ss:Cell>\n' +
-						`    <ss:Data ss:Type="${ typeof val === 'number' ? 'Number': 'String' }">` +
+						`    <ss:Data ss:Type="${typeof val === 'number' ? 'Number' : 'String'}">` +
 							val +
 						'</ss:Data>\n' +
 					'  </ss:Cell>\n'
