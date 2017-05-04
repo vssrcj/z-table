@@ -2,7 +2,7 @@
 <html>
 <head>
    <meta charset="utf-8" />
-   <title>Tablo</title>
+   <title>Z Table</title>
 
    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' />
    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -16,6 +16,25 @@
 		.app {
 			margin: 16px;
 			box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
+			background: #fff;
+		}
+		.app:hover .app--export {
+			display: inherit;
+		}
+		.app--header {
+			display: flex;
+			align-items: center;
+			padding: 8px 16px;
+		}
+		.app--title {
+			font-size: 20px;
+		}
+		.app--export {
+			margin-left: auto;
+			display: none;
+			font-size: small;
+			font-weight: bold;
+			cursor: pointer;
 		}
    </style>
 </head>

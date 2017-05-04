@@ -4,24 +4,23 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 
 import CellHeader from './dist/cell-header'
+import Loader from './dist/loader'
 import { exportTable } from './dist/utils'
 
 export default class ZTable extends Component {
 	static propTypes = {
 		parse: PropTypes.func,
-		header: PropTypes.node,
 		columns: PropTypes.array.isRequired,
 		url: PropTypes.string.isRequired,
 		pageLength: PropTypes.number,
 		defaultSort: PropTypes.object,
 		name: PropTypes.string,
-		subHeader: PropTypes.node,
-		setReload: PropTypes.func
+		setReload: PropTypes.func,
+		setExport: PropTypes.func
 	}
 
 	static defaultProps = {
 		parse: item => item,
-		header: null,
 		pageLength: 10,
 		defaultSort: {
 			value: undefined,
@@ -69,10 +68,6 @@ export default class ZTable extends Component {
 		}
 	})
 
-	onPagerChange = (event) => this.changeWrapper(() => ({
-		pageLength: event.target.value
-	}))
-
 	componentWillMount () {
 		this.load()
 		if (this.props.setReload) {
@@ -80,6 +75,9 @@ export default class ZTable extends Component {
 				this.setState({ loading: true, page: 1 })
 				this.load({ page: 1 })
 			})
+		}
+		if (this.props.setExport) {
+			this.props.setExport(this.onExport)
 		}
 	}
 
@@ -180,26 +178,13 @@ export default class ZTable extends Component {
 
 	render () {
 		const {
-			state: { data, columns, activeColumn, loading, activeSort, pageLength },
-			props: { header, name, subHeader }
+			state: { data, columns, activeColumn, loading, activeSort }
 		} = this
 
-		if (data === undefined) return <div className='z-table--loading'>Loading....</div>
+		if (data === undefined) return <Loader />
 
 		return (
 			<div className='z-table'>
-				{
-					header
-					? <div className='z-table--header'>{ header }</div>
-					: null
-				}
-				<div className='z-table--sub-header'>
-					{
-						subHeader || null
-					}
-					<input className='z-table--pager' type='number' min='1' max='50' value={pageLength} onChange={this.onPagerChange} />
-					{ name ? <button className='z-table--button' onClick={this.onExport}>Export</button> : null }
-				</div>
 				<div>
 					<div className='z-table--head-wrapper'>
 						<div className='z-table--head'>
@@ -226,7 +211,7 @@ export default class ZTable extends Component {
 					<div className='z-table--body'>
 						{
 							loading
-							? <div className='z-table--loader' />
+							? <Loader inRow />
 							: (
 								data.items.map((item, i) => (
 									<div className='z-table--row' key={i}>
@@ -249,10 +234,14 @@ export default class ZTable extends Component {
 							)
 						}
 					</div>
-					<div className='z-table--footer'>
-						{ `Showing ${this.renderFromPage()} - ${this.renderToPage()} entries` }
-						{ this.renderPaging() }
-					</div>
+					{
+						!loading && (
+							<div className='z-table--footer'>
+								{ `Showing ${this.renderFromPage()} - ${this.renderToPage()} entries` }
+								{ this.renderPaging() }
+							</div>
+						)
+					}
 				</div>
 			</div>
 		)

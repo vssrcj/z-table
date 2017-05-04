@@ -6,30 +6,12 @@
 	background: #fff;
 }
 
-.z-table--button {
-	border: none;
-	background: #5386a7;
-	color: #fff;
-	cursor: pointer;
-	padding: 8px;
-	border-radius: 2px;
-}
-.z-table--button:hover {
-	background: #437697;
-}
-.z-table--header {
-	font-size: 20px;
-	padding: 10px 16px;
-}
 .z-table--action {
 	color: #ddd;
 	font-size: 18px;
 }
 .z-table--action + .z-table--action {
 	margin-left: 10px;
-}
-.z-table--loading {
-	padding: 10px;
 }
 .z-table--head-wrapper {
 }
@@ -146,17 +128,6 @@
 .z-table--active-sort-name {
 	font-weight: bold;
 	color: #000;
-}
-.z-table--pager {
-	outline: none;
-	border-radius: 2px;
-	width: 40px;
-	padding: 7px;
-	border: 1px solid #ccc;
-	margin-right: 10px;
-}
-.z-table--sub-header {
-	padding: 5px 0 5px 16px;
 }
 
 .z-table--loader {
