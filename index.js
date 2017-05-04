@@ -24,6 +24,10 @@ var _cellHeader = require('./dist/cell-header');
 
 var _cellHeader2 = _interopRequireDefault(_cellHeader);
 
+var _loader = require('./dist/loader');
+
+var _loader2 = _interopRequireDefault(_loader);
+
 var _utils = require('./dist/utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -70,14 +74,6 @@ var ZTable = function (_Component) {
 
 				return {
 					columns: columns
-				};
-			});
-		};
-
-		_this.onPagerChange = function (event) {
-			return _this.changeWrapper(function () {
-				return {
-					pageLength: event.target.value
 				};
 			});
 		};
@@ -204,6 +200,9 @@ var ZTable = function (_Component) {
 					_this2.load({ page: 1 });
 				});
 			}
+			if (this.props.setExport) {
+				this.props.setExport(this.onExport);
+			}
 		}
 	}, {
 		key: 'load',
@@ -253,39 +252,14 @@ var ZTable = function (_Component) {
 			    columns = _state.columns,
 			    activeColumn = _state.activeColumn,
 			    loading = _state.loading,
-			    activeSort = _state.activeSort,
-			    pageLength = _state.pageLength,
-			    _props = this.props,
-			    header = _props.header,
-			    name = _props.name,
-			    subHeader = _props.subHeader;
+			    activeSort = _state.activeSort;
 
 
-			if (data === undefined) return _react2.default.createElement(
-				'div',
-				{ className: 'z-table--loading' },
-				'Loading....'
-			);
+			if (data === undefined) return _react2.default.createElement(_loader2.default, null);
 
 			return _react2.default.createElement(
 				'div',
 				{ className: 'z-table' },
-				header ? _react2.default.createElement(
-					'div',
-					{ className: 'z-table--header' },
-					header
-				) : null,
-				_react2.default.createElement(
-					'div',
-					{ className: 'z-table--sub-header' },
-					subHeader || null,
-					_react2.default.createElement('input', { className: 'z-table--pager', type: 'number', min: '1', max: '50', value: pageLength, onChange: this.onPagerChange }),
-					name ? _react2.default.createElement(
-						'button',
-						{ className: 'z-table--button', onClick: this.onExport },
-						'Export'
-					) : null
-				),
 				_react2.default.createElement(
 					'div',
 					null,
@@ -322,7 +296,7 @@ var ZTable = function (_Component) {
 					_react2.default.createElement(
 						'div',
 						{ className: 'z-table--body' },
-						loading ? _react2.default.createElement('div', { className: 'z-table--loader' }) : data.items.map(function (item, i) {
+						loading ? _react2.default.createElement(_loader2.default, { inRow: true }) : data.items.map(function (item, i) {
 							return _react2.default.createElement(
 								'div',
 								{ className: 'z-table--row', key: i },
@@ -341,7 +315,7 @@ var ZTable = function (_Component) {
 							);
 						})
 					),
-					_react2.default.createElement(
+					!loading && _react2.default.createElement(
 						'div',
 						{ className: 'z-table--footer' },
 						'Showing ' + this.renderFromPage() + ' - ' + this.renderToPage() + ' entries',
@@ -357,20 +331,18 @@ var ZTable = function (_Component) {
 
 ZTable.propTypes = {
 	parse: _propTypes2.default.func,
-	header: _propTypes2.default.node,
 	columns: _propTypes2.default.array.isRequired,
 	url: _propTypes2.default.string.isRequired,
 	pageLength: _propTypes2.default.number,
 	defaultSort: _propTypes2.default.object,
 	name: _propTypes2.default.string,
-	subHeader: _propTypes2.default.node,
-	setReload: _propTypes2.default.func
+	setReload: _propTypes2.default.func,
+	setExport: _propTypes2.default.func
 };
 ZTable.defaultProps = {
 	parse: function parse(item) {
 		return item;
 	},
-	header: null,
 	pageLength: 10,
 	defaultSort: {
 		value: undefined,
