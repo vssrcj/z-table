@@ -30,14 +30,14 @@ export default class Loading extends Component {
 	render () {
 		if (this.props.inRow) {
 			return (
-				<div style={{ background: '#f7f7f7', borderTop: '1px solid #eee', borderBottom: '1px solid #eee', padding: '8px 16px' }}>
+				<div className='z-table--loader-in-row'>
 					Loading
 					{ Array(this.state.count).fill().map((_, i) => <span key={i}>.</span>) }
 				</div>
 			)
 		}
 		return (
-			<div style={{ background: '#fff', borderTop: '1px solid #eee', borderBottom: '1px solid #eee', padding: '8px 16px' }}>
+			<div className='z-table--loader'>
 				Loading
 				{ Array(this.state.count).fill().map((_, i) => <span key={i}>.</span>) }
 			</div>

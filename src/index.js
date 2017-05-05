@@ -181,7 +181,7 @@ export default class ZTable extends Component {
 			state: { data, columns, activeColumn, loading, activeSort }
 		} = this
 
-		if (data === undefined) return <Loader />
+		if (data === undefined || true) return <Loader />
 
 		return (
 			<div className='z-table'>

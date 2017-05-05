@@ -61,7 +61,7 @@ var Loading = function (_Component) {
 			if (this.props.inRow) {
 				return _react2.default.createElement(
 					'div',
-					{ style: { background: '#f7f7f7', borderTop: '1px solid #eee', borderBottom: '1px solid #eee', padding: '8px 16px' } },
+					{ className: 'z-table--loader-in-row' },
 					'Loading',
 					Array(this.state.count).fill().map(function (_, i) {
 						return _react2.default.createElement(
@@ -74,7 +74,7 @@ var Loading = function (_Component) {
 			}
 			return _react2.default.createElement(
 				'div',
-				{ style: { background: '#fff', borderTop: '1px solid #eee', borderBottom: '1px solid #eee', padding: '8px 16px' } },
+				{ className: 'z-table--loader' },
 				'Loading',
 				Array(this.state.count).fill().map(function (_, i) {
 					return _react2.default.createElement(

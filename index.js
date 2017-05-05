@@ -255,7 +255,7 @@ var ZTable = function (_Component) {
 			    activeSort = _state.activeSort;
 
 
-			if (data === undefined) return _react2.default.createElement(_loader2.default, null);
+			if (data === undefined || true) return _react2.default.createElement(_loader2.default, null);
 
 			return _react2.default.createElement(
 				'div',
